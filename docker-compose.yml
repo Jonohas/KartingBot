@@ -1,0 +1,22 @@
+version: "3.5"
+services:
+    karting_bot:
+        build: .
+        container_name: karting_bot
+        init: true
+        ports:
+            - 8085:8080
+        networks:
+            - websites
+            - mongo
+        volumes:
+            - ./log:/app/log
+            - ./data:/app/data
+
+networks:
+  websites:
+    name: websites
+    driver: bridge
+  mongo:
+    name: mongo
+    driver: bridge
