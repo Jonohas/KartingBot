@@ -11,7 +11,6 @@ export const ModuleInstance = class {
     constructor(main) {
         this.name = name;
         this.config = main.config.mongo;
-        this.permissions = main.config.permissions;
         this.log = main.log;
 
         this.commandList = CommandList.commands;
