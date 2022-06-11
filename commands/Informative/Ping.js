@@ -1,7 +1,8 @@
-import BaseCommand from "@/src/modules/CommandRegistar/structures/BaseCommand.js";
-import { SlashCommandBuilder } from '@discordjs/builders';
 
-export default class Ping extends BaseCommand {
+import { SlashCommandBuilder } from '@discordjs/builders';
+import Modules from 'waffle-manager';
+
+export default class Ping extends Modules.CommandRegistar.BaseCommand {
     constructor(main) {
         super();
         this._m = main;
