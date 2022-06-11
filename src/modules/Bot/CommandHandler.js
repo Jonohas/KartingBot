@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageButton } from 'discord.js';
+import { Collection } from 'discord.js';
 
 export class CommandHandler {
     constructor(main) {
@@ -9,10 +10,16 @@ export class CommandHandler {
     }
 
     get commands() {
-        return [
+        const commands = [
             this.createEvent,
             this.ping
         ]
+        const commandsCollection = new Collection();
+
+        for (const command of commands) {
+            commandsCollection.set(command.data.name, command)
+        }
+        return commandsCollection;
     }
 
     get createEvent() {
@@ -58,13 +65,11 @@ export class CommandHandler {
                 .setName('create')
                 .setDescription('Creates an event on certain date')
                 .addStringOption(option =>
-                    option.setName('category')
-                        .setDescription('The date of when the event occurs')
-                        .setRequired(true)
-                        .addChoices( {name: '20/06/2022', value: "20/06/2022"}, {name: '21/06/2022', value: "21/06/2022"})
-                ),
+                    option.setName('input')
+                        .setDescription('The input to echo back')
+                        .setRequired(true)),
+
             async execute(interaction) {
-                console.log(interaction);
                 await interaction.reply({embeds: [createEmbed], components: [selectRow, buttonRow]});
             },
         };
