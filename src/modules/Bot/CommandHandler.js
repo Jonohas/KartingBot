@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageButton } from 'discord.js';
 import { Collection } from 'discord.js';
+import Modules from 'waffle-manager';
 
 export class CommandHandler {
     constructor() {
@@ -20,21 +21,12 @@ export class CommandHandler {
     get commandList() {
         return [
             this.createEvent,
-            this.ping
+            this.ping,
+            this.coming
         ];
     }
 
     get createEvent() {
-        const createEmbed = {
-            color: 0x0099ff,
-            title: 'New karting event!',
-            description: 'Somebody asked to start an event',
-        
-            timestamp: new Date(),
-        };
-
-
-
         const buttonRow = new MessageActionRow()
                 .addComponents(
                     new MessageButton()
@@ -50,15 +42,35 @@ export class CommandHandler {
                 .setName('create')
                 .setDescription('Creates an event on certain date')
                 .addStringOption(option =>
-                    option.setName('input')
-                        .setDescription('The input to echo back')
+                    option.setName('name')
+                        .setDescription('The name to give to the event')
+                        .setRequired(true))
+                .addStringOption(option =>
+                    option.setName('dates')
+                        .setDescription('Dates for this event')
                         .setRequired(true)),
 
             async execute(interaction) {
-                let dates = interaction.options._hoistedOptions[0].value;
+                let user = interaction.user;
+                let eventName = interaction.options._hoistedOptions[0].value;
+                let dates = interaction.options._hoistedOptions[1].value;
+
+                const createEmbed = {
+                    color: 0x0099ff,
+                    title: `${eventName}`,
+                    description: `@${user.username}#${user.discriminator} created an event`,
+                
+                    timestamp: new Date(),
+                };
+
                 dates = dates.split(',');
 
                 let selectOptions = [];
+
+                const eventObject = {
+                    name: eventName,
+                    dates: []
+                }
                 for (const dateString of dates) {
                     const arr = dateString.split("/");
 
@@ -73,7 +85,14 @@ export class CommandHandler {
                         description: "This is a suggested day for the event",
                         value: date.toISOString()
                     })
+                    eventObject.dates.push({
+                        label: date.toDateString(),
+                        value: date.toISOString(),
+                        description: "This is a suggested day for the event",
+                        attendants: []
+                    })
                 }
+                await Modules.events.createEvent(eventObject);
                 const selectRow = new MessageActionRow()
                     .addComponents(
                         new MessageSelectMenu()
@@ -94,6 +113,18 @@ export class CommandHandler {
             async execute(interaction) {
                 await interaction.reply('Pong!');
             },
+        }
+    }
+
+    get coming() {
+        return {
+            data: new SlashCommandBuilder()
+                .setName('coming')
+                .setDescription('Returns a list of people who are coming to the event'),
+            async execute(interaction) {
+                await interaction.reply('List');
+            }
+            
         }
     }
 

@@ -22,7 +22,7 @@ export const ModuleInstance = class {
         this.log = main.log;
 
         this.ch = new CommandHandler();
-        this.eh = new EventHandler();
+        this.eh = new EventHandler(this);
         
 
         this.client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -32,6 +32,7 @@ export const ModuleInstance = class {
         this.log.info(this.name, 'Started!');
 
         this.client.commands = this.ch.commands;
+
         for (const event of this.eh.events) {
             if (event.once) {
                 this.client.once(event.name, (...args) => event.execute(...args));
