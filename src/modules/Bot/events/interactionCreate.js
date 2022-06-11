@@ -18,7 +18,11 @@ module.exports = {
         }
 
         if (interaction.isButton()) {
-            console.log(interaction);
+            await interaction.reply({content: 'Button was selected!', ephemeral: true});
+        }
+
+        if (interaction.isSelectMenu()) {
+            await interaction.reply({ content: 'Something was selected!', ephemeral: true });
         }
 	},
 };

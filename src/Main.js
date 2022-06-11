@@ -8,11 +8,7 @@ export class Main {
     constructor() {
         ['beforeExit', 'SIGTERM', 'SIGINT'].map(signal => process.on(signal, this.cleanup.bind(this)));
 
-        this.config = loadJson('/data/config.json'); // Path based on root of project
-        const auth = loadJson('/data/auth.json');
-        Object.assign(this.config, auth);
-
-        console.log(this.config);
+        this.config = loadJson('/data/auth.json'); // Path based on root of project
     }
 
     get log() {
@@ -26,6 +22,6 @@ export class Main {
     }
 
     async init() {
-        //await Modules.load(this, resolvePath('./src/modules/'));
+        await Modules.load(this, resolvePath('./src/modules/'));
     }
 }

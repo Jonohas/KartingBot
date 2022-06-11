@@ -26,15 +26,20 @@ const row = new MessageActionRow()
 							value: 'second_option',
 						},
 					]),
-                new MessageButton()
-                    .setCustomId('secondary')
-                    .setLabel('Ik kom niet!')
-                    .setStyle('SECONDARY')
-                    .setEmoji('❌')
+
+			);
+const row1 = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+				.setCustomId('secondary')
+				.setLabel('Ik kom niet!')
+				.setStyle('SECONDARY')
+				.setEmoji('❌')
 			);
 
 
 module.exports = {
+	
 	data: new SlashCommandBuilder()
 		.setName('create')
 		.setDescription('Creates an event on certain date')
@@ -46,6 +51,6 @@ module.exports = {
         ),
 	async execute(interaction) {
         console.log(interaction);
-		await interaction.reply({embeds: [exampleEmbed], components: [row]});
+		await interaction.reply({embeds: [exampleEmbed], components: [row, row1]});
 	},
 };
