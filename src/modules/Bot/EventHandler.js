@@ -1,9 +1,7 @@
 
 export class EventHandler {
-    constructor(main) {
-        this.client = main.client;
-        this.log = main.log;
-        this.config = main.config;
+    constructor() {
+
     }
 
     get events() {

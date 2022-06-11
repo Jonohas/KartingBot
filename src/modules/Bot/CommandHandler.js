@@ -3,23 +3,25 @@ import { MessageActionRow, MessageEmbed, MessageSelectMenu, MessageButton } from
 import { Collection } from 'discord.js';
 
 export class CommandHandler {
-    constructor(main) {
-        this.client = main.client;
-        this.log = main.log;
-        this.config = main.config;
+    constructor() {
+
     }
 
     get commands() {
-        const commands = [
-            this.createEvent,
-            this.ping
-        ]
+
         const commandsCollection = new Collection();
 
-        for (const command of commands) {
+        for (const command of this.commandList) {
             commandsCollection.set(command.data.name, command)
         }
         return commandsCollection;
+    }
+
+    get commandList() {
+        return [
+            this.createEvent,
+            this.ping
+        ];
     }
 
     get createEvent() {
@@ -31,24 +33,7 @@ export class CommandHandler {
             timestamp: new Date(),
         };
 
-        const selectRow = new MessageActionRow()
-            .addComponents(
-                new MessageSelectMenu()
-                .setCustomId('select')
-                .setPlaceholder('Nothing selected')
-                .addOptions([
-                    {
-                        label: 'Select me',
-                        description: 'This is a description',
-                        value: 'first_option',
-                    },
-                    {
-                        label: 'You can select me too',
-                        description: 'This is also a description',
-                        value: 'second_option',
-                    },
-                ]),
-            );
+
 
         const buttonRow = new MessageActionRow()
                 .addComponents(
@@ -70,6 +55,32 @@ export class CommandHandler {
                         .setRequired(true)),
 
             async execute(interaction) {
+                let dates = interaction.options._hoistedOptions[0].value;
+                dates = dates.split(',');
+
+                let selectOptions = [];
+                for (const dateString of dates) {
+                    const arr = dateString.split("/");
+
+                    const year = arr[2];
+                    const month = arr[1];
+                    const day = arr[0];
+
+                    const date = new Date(year, parseInt(month) - 1, day);
+
+                    selectOptions.push({
+                        label: date.toDateString(),
+                        description: "This is a suggested day for the event",
+                        value: date.toISOString()
+                    })
+                }
+                const selectRow = new MessageActionRow()
+                    .addComponents(
+                        new MessageSelectMenu()
+                        .setCustomId('select')
+                        .setPlaceholder('Nothing selected')
+                        .addOptions(selectOptions),
+                    );
                 await interaction.reply({embeds: [createEmbed], components: [selectRow, buttonRow]});
             },
         };

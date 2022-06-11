@@ -3,9 +3,6 @@ import { ModuleBuilder } from 'waffle-manager';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import CommandReader from '../../util/CommandReader.cjs';
-const { readCommand } = CommandReader;
-
 import { CommandHandler } from './CommandHandler.js';
 
 // Require the necessary discord.js classes
@@ -24,8 +21,8 @@ export const ModuleInstance = class {
         this.config = main.config.bot;
         this.log = main.log;
 
-        this.ch = new CommandHandler(this);
-        this.eh = new EventHandler(this);
+        this.ch = new CommandHandler();
+        this.eh = new EventHandler();
         
 
         this.client = new Client({ intents: [Intents.FLAGS.GUILDS] });

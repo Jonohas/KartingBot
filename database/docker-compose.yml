@@ -1,0 +1,21 @@
+version: "3.5"
+services:
+    db:
+        image: mongo
+        container_name: mongo_db
+        restart: unless-stopped
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: db_admin
+            MONGO_INITDB_ROOT_PASSWORD: qrXp0HtVfWDH1otKSZM9HiC8m838Ud5u
+        ports:
+            - 27017:27017
+        networks:
+            - mongo
+        volumes:
+            - /var/mongodb:/data/db
+
+
+networks:
+  mongo:
+    name: mongo
+    driver: bridge
