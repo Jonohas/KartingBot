@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "command": "node deploy-commands.js",
-    "start": "node deploy-commands.js && node --experimental-loader=./util/loader.js .",
+    "command": "node --experimental-loader=./util/loader.js deploy-commands.js",
+    "start": "node --experimental-loader=./util/loader.js .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jonahas",

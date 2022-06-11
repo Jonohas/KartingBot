@@ -1,13 +1,13 @@
-import { ModuleBuilder } from 'waffle-manager';
+import Modules, { ModuleBuilder } from 'waffle-manager';
 
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { CommandHandler } from './CommandHandler.js';
 
 // Require the necessary discord.js classes
 import { Client, Intents, Collection } from 'discord.js';
 import { EventHandler } from './EventHandler.js';
+
 const __dirname = path.resolve(path.dirname(''));
 
 const name = 'bot';
@@ -21,7 +21,8 @@ export const ModuleInstance = class {
         this.config = main.config.bot;
         this.log = main.log;
 
-        this.ch = new CommandHandler();
+        //this.ch = new CommandHandler();
+        
         this.eh = new EventHandler(this);
         
 
@@ -31,7 +32,13 @@ export const ModuleInstance = class {
     init() {
         this.log.info(this.name, 'Started!');
 
-        this.client.commands = this.ch.commands;
+        this.client.commands = new Collection();
+        const commands = Modules.CommandRegistar.commandList;
+
+        for (const command of commands) {
+            this.client.commands.set(command.name, command.command);
+        }
+
 
         for (const event of this.eh.events) {
             if (event.once) {

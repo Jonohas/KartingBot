@@ -1,12 +1,10 @@
-import { CommandHandler } from './src/modules/Bot/CommandHandler.js';
+import CommandList from '@/src/modules/CommandRegistar/CommandList.js';
 import { loadJson } from './src/util/Util.js';
-
-const ch = new CommandHandler();
 
 let commands = [];
 
-for (const command of ch.commandList) {
-	commands.push(command.data);
+for (const command of CommandList.commands) {
+	commands.push(command.command.data);
 }
 
 import { REST } from '@discordjs/rest';
